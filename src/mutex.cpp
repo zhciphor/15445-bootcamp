@@ -8,38 +8,51 @@
 // std::mutex class provides the mutex synchronization primitive.
 
 // Includes std::cout (printing) for demo purposes.
+#include <functional>
 #include <iostream>
 // Includes the mutex library header.
 #include <mutex>
 // Includes the thread library header.
+#include <ostream>
 #include <thread>
 
 // Defining a global count variable and a mutex to be used by both threads.
-int count = 0;
-// This is the syntax for declaring and default initializing a mutex.
-std::mutex m; // 全局变量,声明&初始化
+struct safe_cnt {
+  std::mutex m; // not needed construct
+  int count_;
+  safe_cnt() : count_(0) {};
+  safe_cnt(int n) : count_(n) {};
+  void add(int);
+};
 
-// The add_count function allows for a thread to increment the count variable
-// by 1, atomically.
-void add_count() {
-  // Acquire the lock before accessing count, the shared resource.
-  m.lock();
-  count += 1;
-  // Release the lock after accessing count, the shared resource.
-  m.unlock();
+std::ostream &operator<<(std::ostream &os, safe_cnt &cnt) {
+  os << cnt.count_;
+  return os;
 }
 
-// The main method constructs two thread objects and has them both run the
-// add_count function in parallel. After these threads are finished executing,
-// we print the count value, showing that both increments worked successfully.
-// The std::thread library is the C++ STL library used to construct threads.
-// You may view it as a C++ equivalent of the pthread library in C.
-int main() {
+void safe_cnt::add(int accr) {
+  m.lock();
+  count_ += accr;
+  m.unlock();
+  return;
+}
 
-  std::thread t1(add_count);
-  std::thread t2(add_count);
-  t1.join();
-  t2.join();
-  std::cout << "Printing count: " << count << std::endl;
+void safe_add(safe_cnt &cnt, int accr) {
+  std::cout << "start exec cnt is " << cnt << "\n";
+  cnt.add(accr);
+}
+
+int main() {
+  safe_cnt cnt;
+  int n = 100;
+  std::vector<std::thread> threads;
+  threads.reserve(n);
+  for (int i = 0; i < n; i++) {
+    threads.emplace_back(safe_add, std::ref(cnt), 10);
+  }
+  for (auto &t : threads) {
+    t.join();
+  }
+  std::cout << "Printing count: " << cnt << std::endl;
   return 0;
 }
