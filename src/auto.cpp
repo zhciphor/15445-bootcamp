@@ -13,8 +13,8 @@
 // Includes the std::vector library.
 #include <vector>
 // Includes the std::unordered map library.
+#include <map>
 #include <unordered_map>
-
 // The C++ auto keyword is a keyword that tells the compiler to infer the type
 // of a declared variable via its initialization expression. It can be
 // incredibly useful, as it allows for developer efficiency (where the developer
@@ -46,33 +46,15 @@ Abcdefghijklmnopqrstuvwxyz<T, T> construct_obj(T instance) {
 }
 
 int main() {
-  // The auto keyword is used to initialize the variable a. Here, the type
-  // is inferred to be type int.
   auto a = 1;
 
-  // Here are more examples of using auto to declare basic variables.
-  // Depending on the IDE being used, it might say what types a, b, and c
-  // are.
   auto b = 3.2;
   auto c = std::string("Hello");
 
-  // auto is not particularly useful for these prior examples. As one can
-  // see, typing int a = 1;, float b = 3.2;, and std::string c = "Hello";
-  // does not take significant overhead. However, there will definitely
-  // be cases where the type name is long and complicated, or when the
-  // type name is heavily templated, and using auto may be helpful.
   Abcdefghijklmnopqrstuvwxyz<int, int> obj = construct_obj<int>(2);
   auto obj1 = construct_obj<int>(2);
-
-  // Maybe for one line it does not seem all that convenient, but imagine
-  // if using a class with a very long name was useful in the code for
-  // an extended period of time. Then, I'd imagine it would save a lot of
-  // typing time!
-
-  // One important thing to note about the auto keyword is that it 
-  // defaults to copying objects, which can lower performance. Take the
-  // following example where we construct a int vector, and want to
-  // define a variable that is a reference to it.
+  auto nums = std::vector<int>{1, 2, 3};
+  auto words = std::vector<std::string>{"hello", "world"};
   std::vector<int> int_values = {1, 2, 3, 4};
 
   // The following code deep-copies int_values into copy_int_values,
@@ -81,14 +63,14 @@ int main() {
 
   // However, the following code defines ref_int_values, which is a reference
   // to int_values, and therefore does not deep copy the int_values vector.
-  auto& ref_int_values = int_values;
+  auto &ref_int_values = int_values;
 
   // The auto keyword is also useful for iterating through C++ containers.
   // For instance, let's construct an unordered map with std::string keys
   // and int values, and discuss methods of iterating through it.
   std::unordered_map<std::string, int> map;
   map.insert({{"andy", 445}, {"jignesh", 645}});
-
+  std::map<int, int> cnts = {{1, 1}};
   // One method mentioned in unordered_map.cpp was to iterate through
   // a map by using a for loop with an iterator. Compare the readability
   // of the two loops below.
@@ -111,7 +93,7 @@ int main() {
   // and sets.
   std::vector<int> vec = {1, 2, 3, 4};
   std::cout << "Printing elements in vector with auto...\n";
-  for (const auto& elem : vec) {
+  for (const auto &elem : vec) {
     std::cout << elem << " ";
   }
   std::cout << std::endl;

@@ -34,6 +34,7 @@ add_executable(unordered_maps src/unordered_maps.cpp)
 add_executable(unique_ptr src/unique_ptr.cpp)
 add_executable(shared_ptr src/shared_ptr.cpp)
 add_executable(mutex src/mutex.cpp)
+add_executable(mutex_demo src/mutex_demo.cpp)
 add_executable(scoped_lock src/scoped_lock.cpp)
 add_executable(condition_variable src/condition_variable.cpp)
 add_executable(rwlock src/rwlock.cpp)
@@ -45,4 +46,4 @@ add_executable(auto src/auto.cpp)
 add_executable(namespaces src/namespaces.cpp)
 
 # Compiling bootcamp demo code
-add_executable(s24_my_ptr src/spring2024/s24_my_ptr.cpp)
+add_executable(s24_my_ptr src/s24_my_ptr.cpp)

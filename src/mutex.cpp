@@ -16,9 +16,8 @@
 
 // Defining a global count variable and a mutex to be used by both threads.
 int count = 0;
-
 // This is the syntax for declaring and default initializing a mutex.
-std::mutex m;
+std::mutex m; // 全局变量,声明&初始化
 
 // The add_count function allows for a thread to increment the count variable
 // by 1, atomically.
@@ -36,11 +35,11 @@ void add_count() {
 // The std::thread library is the C++ STL library used to construct threads.
 // You may view it as a C++ equivalent of the pthread library in C.
 int main() {
+
   std::thread t1(add_count);
   std::thread t2(add_count);
   t1.join();
   t2.join();
-
   std::cout << "Printing count: " << count << std::endl;
   return 0;
 }
